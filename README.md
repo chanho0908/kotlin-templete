@@ -2,7 +2,11 @@
 * **App**
 	* [DependencyInjector](#DependencyInjector)
 	* [Application](#Application)
-* **Domain**
+* **data**
+	* [DataSource](#DataSource)
+ 	* [Repository](#Repository)
+  	* [RepositoryImpl](#RepositoryImpl)
+* **domain**
 	* [Constants](#Constants)
 	* [정수형 에러처리 Model](#정수형유효성검사)
 	* [정수형Enum](#정수형Enum)
@@ -12,7 +16,7 @@
   	* [isEmpty](#isEmpty)
   	* [CheckDuplicated](#CheckDuplicated)
   	* [MaxLength](#MaxLength)
-* **Presentation**
+* **presentation**
 	* [UiEvent](#UiEvent)
  	* [InputView](#InputView)
     	* [OutputView](#OutputView)
@@ -20,6 +24,32 @@
       	* [천원단위변환](#천원단위변환)
       	* [첫째자리까지반올림](#첫째자리까지반올림)
       	* [splitByComma](#splitByComma)
+   
+## DataSource
+```
+class ProductDataSource {
+    private val baseUrl = "src/main/resources/"
+
+    fun getProduct() = File(baseUrl).useLines { lines ->
+        processLines(lines)
+    }
+
+    private fun processLines(lines: Sequence<String>) =
+        lines.drop(1)
+            .map {  }
+            .toList()
+}
+```
+
+# RepositoryImpl
+```
+class ProductRepositoryImpl(
+    private val dataSource: 
+) : Repository {
+    
+}
+```
+
 ## DependencyInjector
 ```
 class DependencyInjector {
