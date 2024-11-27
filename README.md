@@ -215,6 +215,42 @@ class OutputView {
 }
 ```
 
+## ViewController
+```
+class ViewController(
+    private val inputView: InputView,
+    private val outputView: OutputView,
+    private val viewModel: ViewModel
+) {
+    init {
+        checkUiEvent()
+    }
+
+    private fun checkUiEvent(){
+        //when(val event = viewModel.state.uiEvent){
+        //    is UiEvent. -> (event.msg)
+        //}
+    }
+
+    private fun onUiEventUserInput(msg: String){
+        retryWhenNoException {
+            outputView.printMessage(msg)
+            val input = inputView.readItem()
+            //viewModel.
+        }
+        checkUiEvent()
+    }
+
+    private fun onUiEventUserInput(msg: String){
+        retryWhenNoException {
+            outputView.printMessage(msg)
+            val input = inputView.readItem()
+            //viewModel.
+        }
+        checkUiEvent()
+    }
+```
+
 ## Retry
 ```
 fun<T> retryWhenNoException(action : () -> T): T{
