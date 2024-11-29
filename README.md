@@ -20,6 +20,7 @@
 	* [UiEvent](#UiEvent)
  	* [InputView](#InputView)
     	* [OutputView](#OutputView)
+     	* [ViewModel](#ViewModel)
      	* [Retry](#Retry)
       	* [천원단위변환](#천원단위변환)
       	* [첫째자리까지반올림](#첫째자리까지반올림)
@@ -144,7 +145,7 @@ enum class Error(private val msg: String) {
 
 # Validate[가,나,다]
 ```
-class CheckWorkerUseCase {
+class Check XXX UseCase {
     operator fun invoke(input: String): List<String> {
         defaultValidate(input)
         val spliterator = input.splitByComma()
@@ -219,15 +220,17 @@ private fun isValidNameLength(spliterator: List<String>) {
 ```
 sealed interface UiEvent {
     val msg: String
-    data class InputCarNames(override val msg: String): UiEvent
-    data class InputTryCount(override val msg: String): UiEvent
-    data class PlayGame(override val msg: String): UiEvent
-    data class DisplayWinner(override val msg: String): UiEvent
+    data class OnUiEvent(override val msg: String): UiEvent
+    data class OnUiEvent(override val msg: String): UiEvent
+    data class OnUiEvent(override val msg: String): UiEvent
+    data class OnUiEvent(override val msg: String): UiEvent
 }
 ```
 
 ## InputView
 ```
+import camp.nextstep.edu.missionutils.Console.readLine
+
 class InputView {
     fun readItem(): String{
         val input = readLine()
@@ -241,6 +244,30 @@ class InputView {
 class OutputView {
     fun printMessage(msg: String){
         println(msg)
+    }
+}
+```
+
+## ViewModel
+```
+data class LottoState(
+    val uiEvent: UiEvent
+) {
+    companion object {
+        fun create(): State {
+            return State(
+                UiEvent.OnUiEventInputPurchasePrice()
+            )
+        }
+    }
+}
+
+class ViewModel {
+    private val _state = State.create()
+    val state get() = _state
+
+    fun onCompleteInputPurchasePrice(input: String){
+
     }
 }
 ```
