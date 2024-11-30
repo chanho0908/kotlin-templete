@@ -1,146 +1,68 @@
 
-* **App**
-	* [DependencyInjector](#DependencyInjector)
-	* [Application](#Application)
-* **data**
-	* [DataSource](#DataSource)
- 	* [Repository](#Repository)
-  	* [RepositoryImpl](#RepositoryImpl)
 * **domain**
 	* [Constants](#Constants)
-	* [정수형 에러처리 Model](#정수형유효성검사)
+	* [Validate [정수형]](#정수형일반유효성검사)
+ 	* [Validate[가,나,다]](#Validate[가,나,다])
 	* [정수형Enum](#정수형Enum)
  	* [ErrorEnum](#ErrorEnum)
-  	* [Regex_["가,나,다"]](#Regex)
-  	* [Validate[가,나,다]](#Validate[가,나,다])
   	* [isEmpty](#isEmpty)
   	* [CheckDuplicated](#CheckDuplicated)
   	* [MaxLength](#MaxLength)
 * **presentation**
-	* [UiEvent](#UiEvent)
- 	* [InputView](#InputView)
-    	* [OutputView](#OutputView)
-     	* [ViewModel](#ViewModel)
-     	* [Retry](#Retry)
       	* [천원단위변환](#천원단위변환)
       	* [첫째자리까지반올림](#첫째자리까지반올림)
       	* [splitByComma](#splitByComma)
+
+* **Test**
+      	* [정수형에러테스트](#정수형에러테스트)
    
-## DataSource
-```
-class ProductDataSource {
-    private val baseUrl = "src/main/resources/"
-
-    fun getProduct() = File(baseUrl).useLines { lines ->
-        processLines(lines)
-    }
-
-    private fun processLines(lines: Sequence<String>) =
-        lines.drop(1)
-            .map {  }
-            .toList()
-}
-```
-
-# RepositoryImpl
-```
-class ProductRepositoryImpl(
-    private val dataSource: 
-) : Repository {
-    
-}
-```
-
-## DependencyInjector
-```
-class DependencyInjector {
-
-    fun injectViewController(): ViewController {
-        val inputView = injectInputView()
-        val outputView = injectOutPutView()
-        val viewModel = injectViewModel()
-				return ViewController(inputView, outputView, viewModel)
-    }
-
-    private fun injectViewModel(): ViewModel {
-        return ViewModel()
-    }
-
-    private fun injectInputView() = InputView()
-    private fun injectOutPutView() = OutputView()
-}
-```
-
-## Application
-```
-fun main() {
-    val di = DependencyInjector()
-    di.injectViewController()
-}
-```
-
 ## Constants
 ```
 enum class Constants(private val value: String) {
-    DELIMITER(",");
 
     override fun toString(): String = value
 
 }
 ```
 
-## 정수형유효성검사
+## 정수형일반유효성검사
 ```
-@JvmInline
-value class TryCount (
-    val value: Int
-){
-    init {
-        validate()
-    }
-    private fun validate(){
-        require(value > 0){ Error.ONLY_DIGIT }
+class Check XX UseCase {
+    operator fun invoke(input: String): Int {
+        validate(input, winningNumber)
+        return input.toInt()
     }
 
-    companion object{
-        private fun from(input: String): TryCount{
-            require(input.isNotBlank()) { Error.EMPTY }
-            requireNotNull(input.toIntOrNull()){ Error.ONLY_DIGIT }
-            return TryCount(input.toInt())
-        }
-
-        operator fun invoke(input: String) = from(input)
+    private fun validate(input: String){
+        isEmpty(input)
+        isNumeric(input)
     }
-}
-```
 
-## 정수형Enum
-```
-enum class NumericConstants(val value: Int) {
+    private fun isEmpty(input: String){
+        require(input.isNotBlank()) { Error.EMPTY }
+    }
+
+    private fun isNumeric(input: String) {
+        requireNotNull(input.toIntOrNull()){ Error.ONLY_DIGIT }
+    }
 }
 ```
 
 ## ErrorEnum
 ```
 enum class Error(private val msg: String) {
-    EMPTY("빈 이름이 입력 되었어요."),
-    INVALID_LENGTH("자동차 이름은 5글자 이하만 허용됩니다."),
-    DUPLICATED("자동차 이름은 중복될 수 없어요."),
-    INVALID_INPUT("잘못된 입력입니다. 이름은 한/영/숫자로 2명 이상 입력해주세요."),
-    ONLY_DIGIT("0 이상의 정수만 입력해주세요.");
+    EMPTY("빈 값이 입력 되었어요."),
+    DUPLICATED("중복될 수 없어요."),
+    ONLY_DIGIT("0 이상의 정수만 입력해주세요."),
+    INVALID_RANGE("사이의 숫자로 입력해주세요."),
+    INVALID_SIZE("개를 입력해주세요");
 
     override fun toString(): String = "$ERROR $msg"
 
     companion object {
-        private const val ERROR = "[Error]"
+        private const val ERROR = "[ERROR]"
     }
-
 }
-```
-
-## Regex
-```
-^[가-힣,]+
 ```
 
 # Validate[가,나,다]
@@ -216,111 +138,6 @@ private fun isValidNameLength(spliterator: List<String>) {
 }
 ```
 
-## UiEvent
-```
-sealed interface UiEvent {
-    val msg: String
-    data class OnUiEvent(override val msg: String): UiEvent
-    data class OnUiEvent(override val msg: String): UiEvent
-    data class OnUiEvent(override val msg: String): UiEvent
-    data class OnUiEvent(override val msg: String): UiEvent
-}
-```
-
-## InputView
-```
-import camp.nextstep.edu.missionutils.Console.readLine
-
-class InputView {
-    fun readItem(): String{
-        val input = readLine()
-        return input
-    }
-}
-```
-
-## OutputView
-```
-class OutputView {
-    fun printMessage(msg: String){
-        println(msg)
-    }
-}
-```
-
-## ViewModel
-```
-data class LottoState(
-    val uiEvent: UiEvent
-) {
-    companion object {
-        fun create(): State {
-            return State(
-                UiEvent.OnUiEventInputPurchasePrice()
-            )
-        }
-    }
-}
-
-class ViewModel {
-    private val _state = State.create()
-    val state get() = _state
-
-    fun onCompleteInputPurchasePrice(input: String){
-
-    }
-}
-```
-
-## ViewController
-```
-class ViewController(
-    private val inputView: InputView,
-    private val outputView: OutputView,
-    private val viewModel: ViewModel
-) {
-    init {
-        checkUiEvent()
-    }
-
-    private fun checkUiEvent(){
-        //when(val event = viewModel.state.uiEvent){
-        //    is UiEvent. -> (event.msg)
-        //}
-    }
-
-    private fun onUiEventUserInput(msg: String){
-        retryWhenNoException {
-            outputView.printMessage(msg)
-            val input = inputView.readItem()
-            //viewModel.
-        }
-        checkUiEvent()
-    }
-
-    private fun onUiEventUserInput(msg: String){
-        retryWhenNoException {
-            outputView.printMessage(msg)
-            val input = inputView.readItem()
-            //viewModel.
-        }
-        checkUiEvent()
-    }
-```
-
-## Retry
-```
-fun<T> retryWhenNoException(action : () -> T): T{
-    while (true){
-        try {
-            return action()
-        }catch (e: IllegalArgumentException){
-            println(e)
-        }
-    }
-}
-```
-
 ## 천원단위변환
 ```
 fun Int.convertWithDigitComma(): String = "%,d".format(this)
@@ -333,5 +150,65 @@ fun Double.convertRoundAtTwoDecimal(): String = "%.1f".format(this)
 
 ## splitByComma
 ```
-fun String.splitByComma() = this.split(DELIMITER.toString()).filter { it.isNotBlank() }.map { it.trim() }
+fun String.splitByComma() = this.split(",").filter { it.isNotBlank() }.map { it.trim() }
+```
+
+## 정수형에러테스트
+```
+import lotto.domain.rule.Error
+import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
+
+class CheckBonusNumberUseCaseTest {
+    private lateinit var 
+
+    @BeforeEach
+    fun setUp(){
+        
+    }
+
+    @Test
+    fun `입력값이 비어있을 때 예외 테스트`(){
+        Assertions.assertThatThrownBy {
+            (emptyList(),"   ")
+        }.isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("${Error.EMPTY}")
+    }
+
+    @Test
+    fun `입력값이 음수일 때 예외 테스트`(){
+        Assertions.assertThatThrownBy {
+            (emptyList(), "-1")
+        }.isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("${Error.INVALID_RANGE}")
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["가나다, abc, ###, 2147483648"])
+    fun `입력값이 숫자가 아닐 때 테스트`(value: String){
+        Assertions.assertThatThrownBy {
+            (emptyList(), value)
+        }.isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("${Error.ONLY_DIGIT}")
+    }
+
+    @Test
+    fun `번호가 범위를 초과했을 때 테스트`(){
+        Assertions.assertThatThrownBy {
+            (emptyList(), "55")
+        }.isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("${Error.INVALID_RANGE}")
+    }
+
+    @Test
+    fun `번호가 중복되었을 때 테스트`(){
+        Assertions.assertThatThrownBy {
+            (listOf(1,2,3,4,5,6),"1")
+        }.isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("${Error.WINNING_DUPLICATED}")
+    }
+}
 ```
