@@ -51,7 +51,7 @@ data class State(
     companion object {
         fun create(): State {
             return State(
-                UiEvent.OnUiEventInputPurchasePrice()
+                UiEvent.OnUiEvent1("abc")
             )
         }
     }
