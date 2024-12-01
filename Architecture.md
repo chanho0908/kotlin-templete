@@ -26,7 +26,7 @@ fun<T> retryWhenNoException(action : () -> T): T{
         try {
             return action()
         }catch (e: IllegalArgumentException){
-            println(e)
+            println(e.message)
         }
     }
 }
@@ -36,10 +36,7 @@ fun<T> retryWhenNoException(action : () -> T): T{
 ```
 sealed interface UiEvent {
     val msg: String
-    data class OnUiEvent1(override val msg: String): UiEvent
-    data class OnUiEvent2(override val msg: String): UiEvent
-    data class OnUiEvent3(override val msg: String): UiEvent
-    data class OnUiEvent4(override val msg: String): UiEvent
+    data class OnUiEvent(override val msg: String): UiEvent
 }
 ```
 
@@ -91,15 +88,6 @@ class ViewController(
         }
         checkUiEvent()
     }
-
-    private fun onUiEventUserInput2(msg: String){
-        retryWhenNoException {
-            outputView.printMessage(msg)
-            val input = inputView.readItem()
-            //viewModel.
-        }
-        checkUiEvent()
-    }
 }
 ```
 
@@ -113,7 +101,7 @@ class DependencyInjector {
         val inputView = injectInputView()
         val outputView = injectOutPutView()
         val viewModel = injectViewModel()
-				return ViewController(inputView, outputView, viewModel)
+	return ViewController(inputView, outputView, viewModel)
     }
 
     private fun injectViewModel(): ViewModel {
