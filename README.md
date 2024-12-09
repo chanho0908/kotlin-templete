@@ -260,9 +260,8 @@ fun Double.convertRoundAtTwoDecimal(): String = "%.1f".format(this)
 fun String.splitByComma() = this.split(",").filter { it.isNotBlank() }.map { it.trim() }
 ```
 
-## 정수형에러테스트
+## 정수형에러테스트<br>
 ```
-import lotto.domain.rule.Error
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
