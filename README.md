@@ -14,9 +14,8 @@
       	* [천원단위변환](#천원단위변환)<br>
       	* [첫째자리까지반올림](#첫째자리까지반올림)<br>
       	* [splitByComma](#splitByComma)<br>
-
-* **Test**
-      	* [정수형에러테스트](#정수형에러테스트)
+        * [Map<String, List<String>](#Map<String, List<String>)<br>
+       
 
 ## 월
 ```
@@ -240,4 +239,15 @@ fun Double.convertRoundAtTwoDecimal(): String = "%.1f".format(this)
 ## splitByComma
 ```
 fun String.splitByComma() = this.split(",").filter { it.isNotBlank() }.map { it.trim() }
+```
+
+## Map<String, List<String>
+```
+fun onCompleteInputNotEatMenu(input: String, idx: Int) {
+	val notEatMenu = notEatMenuUseCase(input)
+	val coach = _state.coach[idx]
+	val currentNotEatMenu = _state.notEatMenu.toMutableMap()
+	currentNotEatMenu[coach] = _state.notEatMenu.getOrDefault(coach, emptyList()) + notEatMenu
+	_state = _state.copy(notEatMenu = currentNotEatMenu)
+}
 ```
