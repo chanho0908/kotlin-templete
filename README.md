@@ -5,8 +5,6 @@
  	* [Validate[가,나,다]](#Validate[가,나,다])
 	* [정수형Enum](#정수형Enum)
  	* [ErrorEnum](#ErrorEnum)
-  	* [isEmpty](#isEmpty)
-  	* [CheckDuplicated](#CheckDuplicated)
   	* [MaxLength](#MaxLength)
   	* [상태관리인터페이스](#sealedinterface)
   	* [일주일](#일주일)
@@ -172,7 +170,7 @@ enum class Error(private val msg: String) {
 }
 ```
 
-# Validate[가,나,다]
+## Validate[가,나,다]
 ```
 class Check XXX UseCase {
     operator fun invoke(input: String): List<String> {
@@ -220,22 +218,6 @@ class Check XXX UseCase {
 }
 ```
 
-## isEmpty
-```
-private fun isEmpty(input: String) {
-   require(input.isNotBlank()) { Error.EMPTY }
-}
-
-```
-
-## CheckDuplicated
-```
-private fun isDuplicated(spliterator: List<String>) {
-	val map = spliterator.groupingBy { it }.eachCount()
-	require(map.all { it.value == 1 }) { Error.DUPLICATED_WORKER }
-}
-```
-
 ## MaxLength
 ```
 private fun isValidNameLength(spliterator: List<String>) {
@@ -258,63 +240,4 @@ fun Double.convertRoundAtTwoDecimal(): String = "%.1f".format(this)
 ## splitByComma
 ```
 fun String.splitByComma() = this.split(",").filter { it.isNotBlank() }.map { it.trim() }
-```
-
-## 정수형에러테스트<br>
-```
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
-
-class CheckBonusNumberUseCaseTest {
-    private lateinit var 
-
-    @BeforeEach
-    fun setUp(){
-        
-    }
-
-    @Test
-    fun `입력값이 비어있을 때 예외 테스트`(){
-        Assertions.assertThatThrownBy {
-            (emptyList(),"   ")
-        }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("${Error.EMPTY}")
-    }
-
-    @Test
-    fun `입력값이 음수일 때 예외 테스트`(){
-        Assertions.assertThatThrownBy {
-            (emptyList(), "-1")
-        }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("${Error.INVALID_RANGE}")
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["가나다, abc, ###, 2147483648"])
-    fun `입력값이 숫자가 아닐 때 테스트`(value: String){
-        Assertions.assertThatThrownBy {
-            (emptyList(), value)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("${Error.ONLY_DIGIT}")
-    }
-
-    @Test
-    fun `번호가 범위를 초과했을 때 테스트`(){
-        Assertions.assertThatThrownBy {
-            (emptyList(), "55")
-        }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("${Error.INVALID_RANGE}")
-    }
-
-    @Test
-    fun `번호가 중복되었을 때 테스트`(){
-        Assertions.assertThatThrownBy {
-            (listOf(1,2,3,4,5,6),"1")
-        }.isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("${Error.WINNING_DUPLICATED}")
-    }
-}
 ```
