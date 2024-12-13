@@ -5,7 +5,6 @@
  	* [Validate[가,나,다]](#Validate[가,나,다])
 	* [정수형Enum](#정수형Enum)
  	* [ErrorEnum](#ErrorEnum)
-  	* [MaxLength](#MaxLength)
   	* [상태관리인터페이스](#sealedinterface)
   	* [일주일](#일주일)
   	* [월](#월)
@@ -217,15 +216,6 @@ class Check XXX UseCase {
 }
 ```
 
-## MaxLength
-```
-private fun isValidNameLength(spliterator: List<String>) {
-	require(spliterator.all { it.length <= MAX_NAME_LENGTH.value }) {
-	    Error.OVER_NAME_SIZE
-	}
-}
-```
-
 ## 천원단위변환
 ```
 fun Int.convertWithDigitComma(): String = "%,d".format(this)
@@ -241,13 +231,13 @@ fun Double.convertRoundAtTwoDecimal(): String = "%.1f".format(this)
 fun String.splitByComma() = this.split(",").filter { it.isNotBlank() }.map { it.trim() }
 ```
 
-## Map<String, List<String>
+### Map<String, List<String>>
 ```
 fun onCompleteInputNotEatMenu(input: String, idx: Int) {
-	val notEatMenu = notEatMenuUseCase(input)
-	val coach = _state.coach[idx]
-	val currentNotEatMenu = _state.notEatMenu.toMutableMap()
-	currentNotEatMenu[coach] = _state.notEatMenu.getOrDefault(coach, emptyList()) + notEatMenu
-	_state = _state.copy(notEatMenu = currentNotEatMenu)
+  val notEatMenu = notEatMenuUseCase(input)
+  val coach = _state.coach[idx]
+  val currentNotEatMenu = _state.notEatMenu.toMutableMap()
+  currentNotEatMenu[coach] = _state.notEatMenu.getOrDefault(coach, emptyList()) + notEatMenu
+  _state = _state.copy(notEatMenu = currentNotEatMenu)
 }
 ```
