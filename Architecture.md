@@ -26,7 +26,7 @@ fun<T> retryWhenNoException(action : () -> T): T{
         try {
             return action()
         }catch (e: IllegalArgumentException){
-            println(e.message)
+            println([ERROR] 유효하지 않은 입력값입니다. 다시 입력해주세요.)
         }
     }
 }
@@ -40,7 +40,7 @@ data class State(
     companion object {
         fun create(): State {
             return State(
-                UiEvent.OnUiEvent1("abc")
+                
             )
         }
     }
@@ -66,8 +66,6 @@ class ViewController(
     
 }
 ```
-
-
 
 ## DependencyInjector
 ```
@@ -99,10 +97,10 @@ fun main() {
 
 ## DataSource
 ```
-class ProductDataSource {
+class DataSource {
     private val baseUrl = "src/main/resources/"
 
-    fun getProduct() = File(baseUrl).useLines { lines ->
+    fun get() = File(baseUrl).useLines { lines ->
         processLines(lines)
     }
 
@@ -115,14 +113,14 @@ class ProductDataSource {
 
 ## Repository
 ```
-interface ProductRepository {
-    fun getProduct(): Products
+interface Repository {
+    fun get(): 
 }
 ```
 
 ## RepositoryImpl
 ```
-class ProductRepositoryImpl(
+class RepositoryImpl(
     private val dataSource: 
 ) : Repository {
     
@@ -131,10 +129,11 @@ class ProductRepositoryImpl(
 
 ## DTO
 ```
-data class ProductResponse(
+data class Response(
 ) {
     fun toDomainModel():  {
     }
 }
-fun List<String>.toProductResponse(): ProductResponse {
+fun List<String>.toResponse():  {
+}
 ```
