@@ -32,18 +32,10 @@ fun<T> retryWhenNoException(action : () -> T): T{
 }
 ```
 
-## UiEvent
-```
-sealed interface UiEvent {
-    val msg: String
-    data class OnUiEvent(override val msg: String): UiEvent
-}
-```
-
 ## ViewModel
 ```
 data class State(
-    val uiEvent: UiEvent
+    
 ) {
     companion object {
         fun create(): State {
@@ -71,23 +63,7 @@ class ViewController(
     private val outputView: OutputView,
     private val viewModel: ViewModel
 ) {
-    init {
-        checkUiEvent()
-    }
-
-    private fun checkUiEvent(){
-        //when(val event = viewModel.state.uiEvent){
-        //}
-    }
-
-    private fun onUiEventUserInput(msg: String){
-        retryWhenNoException {
-            outputView.printMessage(msg)
-            val input = inputView.readItem()
-            //viewModel.
-        }
-        checkUiEvent()
-    }
+    
 }
 ```
 
@@ -132,12 +108,19 @@ class ProductDataSource {
 
     private fun processLines(lines: Sequence<String>) =
         lines.drop(1)
-            .map {  }
+            .map { it.splitByComma(). }
             .toList()
 }
 ```
 
-# RepositoryImpl
+## Repository
+```
+interface ProductRepository {
+    fun getProduct(): Products
+}
+```
+
+## RepositoryImpl
 ```
 class ProductRepositoryImpl(
     private val dataSource: 
@@ -146,3 +129,12 @@ class ProductRepositoryImpl(
 }
 ```
 
+## DTO
+```
+data class ProductResponse(
+) {
+    fun toDomainModel():  {
+    }
+}
+fun List<String>.toProductResponse(): ProductResponse {
+```
