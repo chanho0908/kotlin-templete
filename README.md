@@ -1,15 +1,16 @@
 
 * **domain**
 	* [Validate [정수형]](#정수형일반유효성검사)
- 	* [Validate[가,나,다]](#Validate[가,나,다])
-  	* [상태관리인터페이스](#sealedinterface)
-  	* [일주일](#일주일)
-  	* [월](#월)
+	* [Validate[가,나,다]](#Validate1)
+    * [상태관리인터페이스](#sealedinterface)
+    * [일주일](#일주일)
+    * [월](#월)
+    * [날짜범위검사](#날짜범위검사)
 
 * **presentation**<br>
-      	* [천원단위변환](#천원단위변환)<br>
-      	* [첫째자리까지반올림](#첫째자리까지반올림)<br>
-      	* [splitByComma](#splitByComma)
+  * [천원단위변환](#천원단위변환)<br>
+  * [첫째자리까지반올림](#첫째자리까지반올림)<br>
+  * [splitByComma](#splitByComma)
 
 ## 월
 ```
@@ -113,10 +114,10 @@ sealed interface Category {
         override val key: Int = 1
     ) : Category
 }
-
-## 정수형일반유효성검사정수형Enum
 ```
-class Check XX UseCase {
+
+## 정수형일반유효성검사
+```
     operator fun invoke(input: String): Int {
         validate(input, winningNumber)
         return input.toInt()
@@ -154,9 +155,8 @@ enum class Error(private val msg: String) {
 }
 ```
 
-## Validate[가,나,다]
+## Validate1
 ```
-class Check XXX UseCase {
     operator fun invoke(input: String): List<String> {
         defaultValidate(input)
         val spliterator = input.splitByComma()
@@ -199,6 +199,32 @@ class Check XXX UseCase {
             Error.OVER_NAME_SIZE
         }
     }
+```
+## 날짜범위검사
+```
+class GetInProgressPromotionUseCase(
+    private val promotionRepository: PromotionRepository
+) {
+    operator fun invoke(promotionName: String): PromotionItem? {
+        return inProgressPromotion(promotionName)
+    }
+
+    private fun inProgressPromotion(promotionName: String): PromotionItem? {
+        val foundPromotion = getPromotion(promotionName)
+        if (foundPromotion != null &&
+            foundPromotion.startDate.toLocalDate() <= today().toLocalDate() &&
+            foundPromotion.endDate.toLocalDate() >= today().toLocalDate())
+        {
+            return foundPromotion
+        }
+        return null
+    }
+
+    private fun getPromotion(promotionName: String): PromotionItem? {
+        return promotionRepository.getPromotion().filterPromotion(promotionName)
+    }
+
+    private fun today(): LocalDateTime = DateTimes.now()
 }
 ```
 
