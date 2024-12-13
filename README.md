@@ -1,10 +1,7 @@
 
 * **domain**
-	* [Constants](#Constants)
 	* [Validate [정수형]](#정수형일반유효성검사)
  	* [Validate[가,나,다]](#Validate[가,나,다])
-	* [정수형Enum](#정수형Enum)
- 	* [ErrorEnum](#ErrorEnum)
   	* [상태관리인터페이스](#sealedinterface)
   	* [일주일](#일주일)
   	* [월](#월)
@@ -12,9 +9,7 @@
 * **presentation**<br>
       	* [천원단위변환](#천원단위변환)<br>
       	* [첫째자리까지반올림](#첫째자리까지반올림)<br>
-      	* [splitByComma](#splitByComma)<br>
-        * [Map변환1](#Map<String, List<String>>)<br>
-       
+      	* [splitByComma](#splitByComma)
 
 ## 월
 ```
@@ -118,17 +113,8 @@ sealed interface Category {
         override val key: Int = 1
     ) : Category
 }
-```
-## Constants
-```
-enum class Constants(private val value: String) {
 
-    override fun toString(): String = value
-
-}
-```
-
-## 정수형일반유효성검사
+## 정수형일반유효성검사정수형Enum
 ```
 class Check XX UseCase {
     operator fun invoke(input: String): Int {
@@ -229,15 +215,4 @@ fun Double.convertRoundAtTwoDecimal(): String = "%.1f".format(this)
 ## splitByComma
 ```
 fun String.splitByComma() = this.split(",").filter { it.isNotBlank() }.map { it.trim() }
-```
-
-### Map<String, List<String>>
-```
-fun onCompleteInputNotEatMenu(input: String, idx: Int) {
-  val notEatMenu = notEatMenuUseCase(input)
-  val coach = _state.coach[idx]
-  val currentNotEatMenu = _state.notEatMenu.toMutableMap()
-  currentNotEatMenu[coach] = _state.notEatMenu.getOrDefault(coach, emptyList()) + notEatMenu
-  _state = _state.copy(notEatMenu = currentNotEatMenu)
-}
 ```
