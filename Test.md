@@ -120,4 +120,12 @@ class CheckBonusNumberUseCaseTest {
 }
 ```
 
+### 정상 테스트
+```
+@Test
+    fun `유효한 입력일 때 Purchase 인스턴스가 정상적으로 생성된다`() {
+        assertDoesNotThrow {
+            checkOrderValidationUseCase("[콜라-2],[사이다-1]", products)
+        }
+    }
 ```
